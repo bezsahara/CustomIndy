@@ -7,5 +7,38 @@ plugins {
 
 allprojects {
     group = "org.bezsahara.customindy"
-    version = "0.1.0-SNAPSHOT"
+    version = "0.1.2"
+}
+
+tasks.register("publishLocalAll") {
+    group = "publishing"
+    description = "Publishes compiler-plugin and annotations to the localRepo maven repository."
+    dependsOn(
+        ":customindy-compiler-plugin:publishAllPublicationsToLocalRepoRepository",
+        ":customindy-annotations:publishAllPublicationsToLocalRepoRepository"
+    )
+}
+
+tasks.register<Zip>("zipLocalAnnotation") {
+    group = "publishing"
+    description = "Zips generated/annotation after local publishing."
+    dependsOn("publishLocalAll")
+    from("generated/annotation")
+    destinationDirectory.set(layout.buildDirectory.dir("distributions"))
+    archiveFileName.set("customindy-annotations.zip")
+}
+
+tasks.register<Zip>("zipLocalCompiler") {
+    group = "publishing"
+    description = "Zips generated/compiler after local publishing."
+    dependsOn("publishLocalAll")
+    from("generated/compiler")
+    destinationDirectory.set(layout.buildDirectory.dir("distributions"))
+    archiveFileName.set("customindy-compiler-plugin.zip")
+}
+
+tasks.register("zipLocalAll") {
+    group = "publishing"
+    description = "Publishes locally and creates both annotation and compiler zip archives."
+    dependsOn("zipLocalAnnotation", "zipLocalCompiler")
 }

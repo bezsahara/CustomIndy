@@ -2,6 +2,8 @@
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.buildconfig)
     alias(libs.plugins.gradle.plugin)
+    id("com.gradle.plugin-publish") version "1.3.1"
+
 }
 
 sourceSets {
@@ -39,14 +41,16 @@ buildConfig {
 }
 
 gradlePlugin {
-    website = "https://github.com/bezsahara/customindy"
-    vcsUrl = "https://github.com/bezsahara/customindy.git"
+    website = "https://github.com/bezsahara/CustomIndy"
+    vcsUrl = "https://github.com/bezsahara/CustomIndy.git"
+
+    version = project.version.toString()
 
     plugins {
         create("customindyPlugin", Action {
             displayName = "CustomIndy Gradle Plugin"
-            description = "Allows you to define "
-            tags = listOf("kotlin", "codegen", "bytecode", "compiletime", "dsl")
+            description = "Wires the CustomIndy compiler plugin and annotations into Kotlin builds."
+            tags = listOf("kotlin", "compiler-plugin", "invokedynamic", "bytecode", "codegen")
 
             id = "org.bezsahara.customindy"
             implementationClass = "org.bezsahara.customindy.CustomIndyGradlePlugin"

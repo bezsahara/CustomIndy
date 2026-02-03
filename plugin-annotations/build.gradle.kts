@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
 //    alias(libs.plugins.kotlin.binary.compatibility.validator)
     id("org.jetbrains.dokka") version "2.1.0"
+    id("org.jetbrains.dokka-javadoc") version "2.1.0"
     `maven-publish`
     signing
 }
@@ -19,9 +20,11 @@ kotlin {
     explicitApi()
 }
 
+val dokkaJavadocTask = tasks.named("dokkaGeneratePublicationJavadoc")
+
 tasks.register<Jar>("dokkaJavadocJar") {
-    dependsOn(tasks.dokkaJavadoc)
-    from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
+    dependsOn(dokkaJavadocTask)
+    from(dokkaJavadocTask.map { it.outputs.files })
     archiveClassifier.set("javadoc")
 }
 
@@ -64,7 +67,7 @@ publishing {
     repositories {
         maven {
             name = "localRepo"
-            url = file("../generated").toURI()
+            url = file("../generated/annotation").toURI()
         }
     }
 }
