@@ -1,0 +1,14 @@
+#.idea/*
+#!.idea/externalDependencies.xml
+#!.idea/kotlinTestDataPluginTestDataPaths.xml
+.idea/
+.gradle/
+.kotlin/
+build/
+out/
+trash/
+generated/
+*.iml
+*.log
+.DS_Store
+Thumbs.db

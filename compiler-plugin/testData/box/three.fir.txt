@@ -1,0 +1,3 @@
+FILE: three.kt
+    public final fun mop(): R|kotlin/Unit| {
+    }
