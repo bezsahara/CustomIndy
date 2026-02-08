@@ -41,6 +41,7 @@ dependencies {
     testFixturesImplementation(project)
 
     annotationsRuntimeClasspath(project(":customindy-annotations"))
+    annotationsRuntimeClasspath("org.ow2.asm:asm:9.9.1")
     // Dependencies required to run the internal test framework.
     testArtifacts(libs.kotlin.stdlib)
     testArtifacts(libs.kotlin.stdlib.jdk8)

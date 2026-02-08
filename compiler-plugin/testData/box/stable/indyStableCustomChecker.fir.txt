@@ -1,0 +1,41 @@
+FILE: indyStableCustomChecker.kt
+    package foo.bar
+
+    private final var customCount: R|kotlin/Int| = Int(0)
+        private get(): R|kotlin/Int|
+        private set(value: R|kotlin/Int|): R|kotlin/Unit|
+    public final object NeverChangeChecker : R|org/bezsahara/customindy/annotations/IndyStableChecker| {
+        private constructor(): R|foo/bar/NeverChangeChecker| {
+            super<R|kotlin/Any|>()
+        }
+
+        @R|kotlin/jvm/JvmStatic|() public final fun check(oldValue: R|kotlin/Int|, newValue: R|kotlin/Int|): R|kotlin/Boolean| {
+            ^check Boolean(false)
+        }
+
+        public open override fun checkerMethodHandle(): R|java/lang/invoke/MethodHandle| {
+            ^checkerMethodHandle Q|java/lang/invoke/MethodHandles|.R|java/lang/invoke/MethodHandles.lookup*s|().R|java/lang/invoke/MethodHandles.Lookup.findStatic|(<getClass>(Q|foo/bar/NeverChangeChecker|).R|kotlin/jvm/java|<R|foo/bar/NeverChangeChecker|>, String(check), Q|java/lang/invoke/MethodType|.R|java/lang/invoke/MethodType.methodType*s|(Q|java/lang/Boolean|.R|java/lang/Boolean.TYPE*s|, Q|java/lang/Integer|.R|java/lang/Integer.TYPE*s|, vararg(Q|java/lang/Integer|.R|java/lang/Integer.TYPE*s|)))
+        }
+
+    }
+    public final fun computeCustom(x: R|kotlin/Int|): R|kotlin/Int| {
+        R|foo/bar/customCount| = R|foo/bar/customCount|.R|kotlin/Int.plus|(Int(1))
+        ^computeCustom R|foo/bar/customCount|.R|kotlin/Int.times|(Int(1000)).R|kotlin/Int.plus|(R|<local>/x|)
+    }
+    public final fun customCaller(x: R|kotlin/Int|): R|kotlin/Int| {
+        ^customCaller @R|org/bezsahara/customindy/annotations/IndyStable|(checker = <getClass>(Q|foo/bar/NeverChangeChecker|), stableThread = Q|org/bezsahara/customindy/annotations/StableThread|.R|org/bezsahara/customindy/annotations/StableThread.NONE|) R|foo/bar/computeCustom|(R|<local>/x|)
+    }
+    public final fun box(): R|kotlin/String| {
+        R|foo/bar/customCount| = Int(0)
+        lval a: R|kotlin/Int| = R|foo/bar/customCaller|(Int(1))
+        lval b: R|kotlin/Int| = R|foo/bar/customCaller|(Int(2))
+        ^box when () {
+            ==(R|<local>/a|, R|<local>/b|) && ==(R|foo/bar/customCount|, Int(1)) ->  {
+                String(OK)
+            }
+            else ->  {
+                <strcat>(String(Fail: a=), R|<local>/a|, String( b=), R|<local>/b|, String( count=), R|foo/bar/customCount|)
+            }
+        }
+
+    }

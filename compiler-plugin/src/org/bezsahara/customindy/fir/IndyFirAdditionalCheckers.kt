@@ -6,6 +6,10 @@ import org.bezsahara.customindy.shared.IndyCallSiteInfo
 import org.bezsahara.customindy.shared.IndyCallSiteRegistry
 import org.bezsahara.customindy.shared.IndyClassIds
 import org.bezsahara.customindy.shared.IndyLog
+import org.bezsahara.customindy.shared.StableCallKind
+import org.bezsahara.customindy.shared.StableCallSiteInfo
+import org.bezsahara.customindy.shared.StableCallSiteRegistry
+import org.bezsahara.customindy.shared.StableThreadMode
 import org.jetbrains.kotlin.diagnostics.DiagnosticReporter
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.analysis.checkers.MppCheckerKind
@@ -19,10 +23,12 @@ import org.jetbrains.kotlin.fir.expressions.FirClassReferenceExpression
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.kotlin.fir.expressions.FirGetClassCall
 import org.jetbrains.kotlin.fir.expressions.FirLiteralExpression
+import org.jetbrains.kotlin.fir.expressions.FirQualifiedAccessExpression
 import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.references.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.session.sourcesToPathsMapper
 import org.jetbrains.kotlin.fir.symbols.SymbolInternals
+import org.jetbrains.kotlin.fir.symbols.impl.FirEnumEntrySymbol
 import org.jetbrains.kotlin.fir.types.classId
 import org.jetbrains.kotlin.fir.types.coneType
 import org.jetbrains.kotlin.fir.types.resolvedType
@@ -33,21 +39,41 @@ import org.jetbrains.kotlin.types.ConstantValueKind
 class IndyFirAdditionalCheckers(
     session: FirSession,
     private val registry: IndyCallSiteRegistry,
+    private val stableRegistry: StableCallSiteRegistry,
 ) : FirAdditionalCheckersExtension(session) {
     override val expressionCheckers: ExpressionCheckers = object : ExpressionCheckers() {
         override val functionCallCheckers: Set<FirFunctionCallChecker>
-            get() = setOf(IndyFirFunctionCallChecker(registry))
+            get() = setOf(IndyFirFunctionCallChecker(registry, stableRegistry))
     }
 }
 
 private class IndyFirFunctionCallChecker(
     private val registry: IndyCallSiteRegistry,
+    private val stableRegistry: StableCallSiteRegistry,
 ) : FirFunctionCallChecker(MppCheckerKind.Common) {
     @OptIn(SymbolInternals::class)
     context(context: CheckerContext, reporter: DiagnosticReporter)
     override fun check(expression: FirFunctionCall) {
+        val stableInfo = extractStableInfo(expression)
+        if (stableInfo != null) {
+            val source = expression.source ?: return
+            val filePath = context.containingFilePath
+                ?: context.session.sourcesToPathsMapper.getSourceFilePath(source)
+                ?: return
+            val endOffset = source.endOffset
+            val key = CallSiteKey(filePath, source.startOffset, endOffset)
+            stableRegistry.record(stableInfo.copy(key = key))
+            IndyLog.warn {
+                "Recorded stable call site: $filePath [${source.startOffset}, $endOffset] " +
+                        "kind=${stableInfo.kind} thread=${stableInfo.stableThread}"
+            }
+            return
+        }
+
         val callee = expression.calleeReference.toResolvedCallableSymbol() ?: return
-        if (!callee.fir.annotations.hasAnnotation(IndyClassIds.CUSTOM_INDY, context.session)) {
+        val isIndy = callee.fir.annotations.hasAnnotation(IndyClassIds.CUSTOM_INDY, context.session) ||
+                callee.fir.annotations.hasAnnotation(IndyClassIds.SIMPLE_INDY, context.session)
+        if (!isIndy) {
             return
         }
 
@@ -87,6 +113,40 @@ private class IndyFirFunctionCallChecker(
                 }
             }
         }
+    }
+}
+
+private fun extractStableInfo(expression: FirFunctionCall): StableCallSiteInfo? {
+    val stable = expression.annotations.firstOrNull {
+        it.annotationTypeRef.coneType.classId == IndyClassIds.INDY_STABLE
+    }
+    val stablePure = expression.annotations.firstOrNull {
+        it.annotationTypeRef.coneType.classId == IndyClassIds.INDY_STABLE_PURE
+    }
+    if (stable == null && stablePure == null) return null
+    if (stable != null && stablePure != null) {
+        error("IndyStable and IndyStablePure cannot be used on the same call site.")
+    }
+
+    val stableThreadName = (stable ?: stablePure)?.getEnumArgName("stableThread")
+    val stableThread = stableThreadName?.let { StableThreadMode.valueOf(it) }
+        ?: StableThreadMode.SYNCHRONIZED
+
+    return if (stablePure != null) {
+        StableCallSiteInfo(
+            key = CallSiteKey("", 0, 0),
+            kind = StableCallKind.PURE,
+            stableThread = stableThread,
+            checkerClassId = null,
+        )
+    } else {
+        val checkerClass = stable?.getClassIdArg("checker") ?: IndyClassIds.SELF_GENERATE_CHECKER
+        StableCallSiteInfo(
+            key = CallSiteKey("", 0, 0),
+            kind = StableCallKind.UNPURE,
+            stableThread = stableThread,
+            checkerClassId = checkerClass,
+        )
     }
 }
 
@@ -158,6 +218,12 @@ private fun FirAnnotation.getClassIdArg(name: String): ClassId? {
         is FirClassReferenceExpression -> expr.classTypeRef.coneType.classId
         else -> null
     }
+}
+
+private fun FirAnnotation.getEnumArgName(name: String): String? {
+    val expr = argumentMapping.mapping[Name.identifier(name)] as? FirQualifiedAccessExpression ?: return null
+    val symbol = expr.calleeReference.toResolvedCallableSymbol() as? FirEnumEntrySymbol ?: return null
+    return symbol.name.asString()
 }
 
 private fun FirAnnotation.getLiteralArg(name: String): FirLiteralExpression? {

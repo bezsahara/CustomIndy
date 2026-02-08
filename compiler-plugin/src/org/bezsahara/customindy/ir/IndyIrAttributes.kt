@@ -14,6 +14,7 @@ sealed interface IndyBootstrapIrArg {
     data class DoubleArg(override val index: Int, val value: Double) : IndyBootstrapIrArg
     data class StringArg(override val index: Int, val value: String) : IndyBootstrapIrArg
     data class ClassArg(override val index: Int, val type: IrType) : IndyBootstrapIrArg
+    data class FunctionHandleArg(override val index: Int, val target: IrFunctionSymbol) : IndyBootstrapIrArg
     data class MethodHandleArg(
         override val index: Int,
         val ownerType: IrType,

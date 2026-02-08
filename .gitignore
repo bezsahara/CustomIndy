@@ -12,3 +12,5 @@ generated/
 *.log
 .DS_Store
 Thumbs.db
+docs_data/
+AGENTS.md

@@ -1,0 +1,85 @@
+FILE fqName:foo.bar fileName:/indyStable.kt
+  PROPERTY name:stableCount visibility:private modality:FINAL [var]
+    FIELD PROPERTY_BACKING_FIELD name:stableCount type:kotlin.Int visibility:private [static]
+      EXPRESSION_BODY
+        CONST Int type=kotlin.Int value=0
+    FUN DEFAULT_PROPERTY_ACCESSOR name:<get-stableCount> visibility:private modality:FINAL returnType:kotlin.Int
+      correspondingProperty: PROPERTY name:stableCount visibility:private modality:FINAL [var]
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='private final fun <get-stableCount> (): kotlin.Int declared in foo.bar'
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:stableCount type:kotlin.Int visibility:private [static]' type=kotlin.Int origin=null
+    FUN DEFAULT_PROPERTY_ACCESSOR name:<set-stableCount> visibility:private modality:FINAL returnType:kotlin.Unit
+      VALUE_PARAMETER kind:Regular name:<set-?> index:0 type:kotlin.Int
+      correspondingProperty: PROPERTY name:stableCount visibility:private modality:FINAL [var]
+      BLOCK_BODY
+        SET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:stableCount type:kotlin.Int visibility:private [static]' type=kotlin.Unit origin=null
+          value: GET_VAR '<set-?>: kotlin.Int declared in foo.bar.<set-stableCount>' type=kotlin.Int origin=null
+  FUN name:box visibility:public modality:FINAL returnType:kotlin.String
+    BLOCK_BODY
+      CALL 'private final fun <set-stableCount> (<set-?>: kotlin.Int): kotlin.Unit declared in foo.bar' type=kotlin.Unit origin=EQ
+        ARG <set-?>: CONST Int type=kotlin.Int value=0
+      VAR name:a type:kotlin.Int [val]
+        CALL 'public final fun stableCaller (x: kotlin.Int): kotlin.Int declared in foo.bar' type=kotlin.Int origin=null
+          ARG x: CONST Int type=kotlin.Int value=3
+      VAR name:b type:kotlin.Int [val]
+        CALL 'public final fun stableCaller (x: kotlin.Int): kotlin.Int declared in foo.bar' type=kotlin.Int origin=null
+          ARG x: CONST Int type=kotlin.Int value=3
+      VAR name:c type:kotlin.Int [val]
+        CALL 'public final fun stableCaller (x: kotlin.Int): kotlin.Int declared in foo.bar' type=kotlin.Int origin=null
+          ARG x: CONST Int type=kotlin.Int value=4
+      RETURN type=kotlin.Nothing from='public final fun box (): kotlin.String declared in foo.bar'
+        WHEN type=kotlin.String origin=IF
+          BRANCH
+            if: WHEN type=kotlin.Boolean origin=ANDAND
+              BRANCH
+                if: WHEN type=kotlin.Boolean origin=ANDAND
+                  BRANCH
+                    if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                      ARG arg0: GET_VAR 'val a: kotlin.Int declared in foo.bar.box' type=kotlin.Int origin=null
+                      ARG arg1: GET_VAR 'val b: kotlin.Int declared in foo.bar.box' type=kotlin.Int origin=null
+                    then: CALL 'public final fun not (): kotlin.Boolean declared in kotlin.Boolean' type=kotlin.Boolean origin=EXCLEQ
+                      ARG <this>: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EXCLEQ
+                        ARG arg0: GET_VAR 'val c: kotlin.Int declared in foo.bar.box' type=kotlin.Int origin=null
+                        ARG arg1: GET_VAR 'val a: kotlin.Int declared in foo.bar.box' type=kotlin.Int origin=null
+                  BRANCH
+                    if: CONST Boolean type=kotlin.Boolean value=true
+                    then: CONST Boolean type=kotlin.Boolean value=false
+                then: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                  ARG arg0: CALL 'private final fun <get-stableCount> (): kotlin.Int declared in foo.bar' type=kotlin.Int origin=GET_PROPERTY
+                  ARG arg1: CONST Int type=kotlin.Int value=2
+              BRANCH
+                if: CONST Boolean type=kotlin.Boolean value=true
+                then: CONST Boolean type=kotlin.Boolean value=false
+            then: BLOCK type=kotlin.String origin=null
+              CONST String type=kotlin.String value="OK"
+          BRANCH
+            if: CONST Boolean type=kotlin.Boolean value=true
+            then: BLOCK type=kotlin.String origin=null
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value="Fail: a="
+                GET_VAR 'val a: kotlin.Int declared in foo.bar.box' type=kotlin.Int origin=null
+                CONST String type=kotlin.String value=" b="
+                GET_VAR 'val b: kotlin.Int declared in foo.bar.box' type=kotlin.Int origin=null
+                CONST String type=kotlin.String value=" c="
+                GET_VAR 'val c: kotlin.Int declared in foo.bar.box' type=kotlin.Int origin=null
+                CONST String type=kotlin.String value=" count="
+                CALL 'private final fun <get-stableCount> (): kotlin.Int declared in foo.bar' type=kotlin.Int origin=GET_PROPERTY
+  FUN name:computeStable visibility:public modality:FINAL returnType:kotlin.Int
+    VALUE_PARAMETER kind:Regular name:x index:0 type:kotlin.Int
+    BLOCK_BODY
+      CALL 'private final fun <set-stableCount> (<set-?>: kotlin.Int): kotlin.Unit declared in foo.bar' type=kotlin.Unit origin=PLUSEQ
+        ARG <set-?>: CALL 'public final fun plus (other: kotlin.Int): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=PLUSEQ
+          ARG <this>: CALL 'private final fun <get-stableCount> (): kotlin.Int declared in foo.bar' type=kotlin.Int origin=PLUSEQ
+          ARG other: CONST Int type=kotlin.Int value=1
+      RETURN type=kotlin.Nothing from='public final fun computeStable (x: kotlin.Int): kotlin.Int declared in foo.bar'
+        CALL 'public final fun plus (other: kotlin.Int): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=PLUS
+          ARG <this>: CALL 'public final fun times (other: kotlin.Int): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=MUL
+            ARG <this>: CALL 'private final fun <get-stableCount> (): kotlin.Int declared in foo.bar' type=kotlin.Int origin=GET_PROPERTY
+            ARG other: CONST Int type=kotlin.Int value=10
+          ARG other: GET_VAR 'x: kotlin.Int declared in foo.bar.computeStable' type=kotlin.Int origin=null
+  FUN name:stableCaller visibility:public modality:FINAL returnType:kotlin.Int
+    VALUE_PARAMETER kind:Regular name:x index:0 type:kotlin.Int
+    BLOCK_BODY
+      RETURN type=kotlin.Nothing from='public final fun stableCaller (x: kotlin.Int): kotlin.Int declared in foo.bar'
+        CALL 'public final fun computeStable (x: kotlin.Int): kotlin.Int declared in foo.bar' type=kotlin.Int origin=null
+          ARG x: GET_VAR 'x: kotlin.Int declared in foo.bar.stableCaller' type=kotlin.Int origin=null

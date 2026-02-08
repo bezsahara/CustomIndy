@@ -1,0 +1,76 @@
+FILE fqName:foo.bar fileName:/indyStableDefaultArgs.kt
+  PROPERTY name:defaultCount visibility:private modality:FINAL [var]
+    FIELD PROPERTY_BACKING_FIELD name:defaultCount type:kotlin.Int visibility:private [static]
+      EXPRESSION_BODY
+        CONST Int type=kotlin.Int value=0
+    FUN DEFAULT_PROPERTY_ACCESSOR name:<get-defaultCount> visibility:private modality:FINAL returnType:kotlin.Int
+      correspondingProperty: PROPERTY name:defaultCount visibility:private modality:FINAL [var]
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='private final fun <get-defaultCount> (): kotlin.Int declared in foo.bar'
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:defaultCount type:kotlin.Int visibility:private [static]' type=kotlin.Int origin=null
+    FUN DEFAULT_PROPERTY_ACCESSOR name:<set-defaultCount> visibility:private modality:FINAL returnType:kotlin.Unit
+      VALUE_PARAMETER kind:Regular name:<set-?> index:0 type:kotlin.Int
+      correspondingProperty: PROPERTY name:defaultCount visibility:private modality:FINAL [var]
+      BLOCK_BODY
+        SET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:defaultCount type:kotlin.Int visibility:private [static]' type=kotlin.Unit origin=null
+          value: GET_VAR '<set-?>: kotlin.Int declared in foo.bar.<set-defaultCount>' type=kotlin.Int origin=null
+  FUN name:box visibility:public modality:FINAL returnType:kotlin.String
+    BLOCK_BODY
+      CALL 'private final fun <set-defaultCount> (<set-?>: kotlin.Int): kotlin.Unit declared in foo.bar' type=kotlin.Unit origin=EQ
+        ARG <set-?>: CONST Int type=kotlin.Int value=0
+      VAR name:r1 type:kotlin.String [val]
+        CALL 'public final fun stableDefaultCaller (a: kotlin.Int): kotlin.String declared in foo.bar' type=kotlin.String origin=null
+          ARG a: CONST Int type=kotlin.Int value=1
+      VAR name:r2 type:kotlin.String [val]
+        CALL 'public final fun stableDefaultCaller (a: kotlin.Int): kotlin.String declared in foo.bar' type=kotlin.String origin=null
+          ARG a: CONST Int type=kotlin.Int value=1
+      RETURN type=kotlin.Nothing from='public final fun box (): kotlin.String declared in foo.bar'
+        WHEN type=kotlin.String origin=IF
+          BRANCH
+            if: WHEN type=kotlin.Boolean origin=ANDAND
+              BRANCH
+                if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                  ARG arg0: GET_VAR 'val r1: kotlin.String declared in foo.bar.box' type=kotlin.String origin=null
+                  ARG arg1: GET_VAR 'val r2: kotlin.String declared in foo.bar.box' type=kotlin.String origin=null
+                then: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                  ARG arg0: CALL 'private final fun <get-defaultCount> (): kotlin.Int declared in foo.bar' type=kotlin.Int origin=GET_PROPERTY
+                  ARG arg1: CONST Int type=kotlin.Int value=1
+              BRANCH
+                if: CONST Boolean type=kotlin.Boolean value=true
+                then: CONST Boolean type=kotlin.Boolean value=false
+            then: BLOCK type=kotlin.String origin=null
+              CONST String type=kotlin.String value="OK"
+          BRANCH
+            if: CONST Boolean type=kotlin.Boolean value=true
+            then: BLOCK type=kotlin.String origin=null
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value="Fail: r1="
+                GET_VAR 'val r1: kotlin.String declared in foo.bar.box' type=kotlin.String origin=null
+                CONST String type=kotlin.String value=" r2="
+                GET_VAR 'val r2: kotlin.String declared in foo.bar.box' type=kotlin.String origin=null
+                CONST String type=kotlin.String value=" count="
+                CALL 'private final fun <get-defaultCount> (): kotlin.Int declared in foo.bar' type=kotlin.Int origin=GET_PROPERTY
+  FUN name:computeDefault visibility:public modality:FINAL returnType:kotlin.String
+    VALUE_PARAMETER kind:Regular name:a index:0 type:kotlin.Int
+    VALUE_PARAMETER kind:Regular name:b index:1 type:kotlin.String
+      EXPRESSION_BODY
+        CONST String type=kotlin.String value="def"
+    BLOCK_BODY
+      CALL 'private final fun <set-defaultCount> (<set-?>: kotlin.Int): kotlin.Unit declared in foo.bar' type=kotlin.Unit origin=PLUSEQ
+        ARG <set-?>: CALL 'public final fun plus (other: kotlin.Int): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=PLUSEQ
+          ARG <this>: CALL 'private final fun <get-defaultCount> (): kotlin.Int declared in foo.bar' type=kotlin.Int origin=PLUSEQ
+          ARG other: CONST Int type=kotlin.Int value=1
+      RETURN type=kotlin.Nothing from='public final fun computeDefault (a: kotlin.Int, b: kotlin.String): kotlin.String declared in foo.bar'
+        STRING_CONCATENATION type=kotlin.String
+          CONST String type=kotlin.String value="count="
+          CALL 'private final fun <get-defaultCount> (): kotlin.Int declared in foo.bar' type=kotlin.Int origin=GET_PROPERTY
+          CONST String type=kotlin.String value=" a="
+          GET_VAR 'a: kotlin.Int declared in foo.bar.computeDefault' type=kotlin.Int origin=null
+          CONST String type=kotlin.String value=" b="
+          GET_VAR 'b: kotlin.String declared in foo.bar.computeDefault' type=kotlin.String origin=null
+  FUN name:stableDefaultCaller visibility:public modality:FINAL returnType:kotlin.String
+    VALUE_PARAMETER kind:Regular name:a index:0 type:kotlin.Int
+    BLOCK_BODY
+      RETURN type=kotlin.Nothing from='public final fun stableDefaultCaller (a: kotlin.Int): kotlin.String declared in foo.bar'
+        CALL 'public final fun computeDefault (a: kotlin.Int, b: kotlin.String): kotlin.String declared in foo.bar' type=kotlin.String origin=null
+          ARG a: GET_VAR 'a: kotlin.Int declared in foo.bar.stableDefaultCaller' type=kotlin.Int origin=null

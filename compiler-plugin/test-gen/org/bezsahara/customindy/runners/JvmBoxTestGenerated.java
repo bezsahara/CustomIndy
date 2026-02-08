@@ -5,6 +5,7 @@ package org.bezsahara.customindy.runners;
 import com.intellij.testFramework.TestDataPath;
 import org.jetbrains.kotlin.test.util.KtTestUtil;
 import org.jetbrains.kotlin.test.TestMetadata;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -21,20 +22,60 @@ public class JvmBoxTestGenerated extends AbstractJvmBoxTest {
   }
 
   @Test
-  @TestMetadata("anotherBoxTest.kt")
-  public void testAnotherBoxTest() {
-    runTest("compiler-plugin/testData/box/anotherBoxTest.kt");
+  @TestMetadata("customIndy.kt")
+  public void testCustomIndy() {
+    runTest("compiler-plugin/testData/box/customIndy.kt");
   }
 
   @Test
-  @TestMetadata("simple.kt")
-  public void testSimple() {
-    runTest("compiler-plugin/testData/box/simple.kt");
+  @TestMetadata("inlineCustomIndy.kt")
+  public void testInlineCustomIndy() {
+    runTest("compiler-plugin/testData/box/inlineCustomIndy.kt");
   }
 
   @Test
-  @TestMetadata("three.kt")
-  public void testThree() {
-    runTest("compiler-plugin/testData/box/three.kt");
+  @TestMetadata("simpleIndy.kt")
+  public void testSimpleIndy() {
+    runTest("compiler-plugin/testData/box/simpleIndy.kt");
+  }
+
+  @Nested
+  @TestMetadata("compiler-plugin/testData/box/stable")
+  @TestDataPath("$PROJECT_ROOT")
+  public class Stable {
+    @Test
+    public void testAllFilesPresentInStable() {
+      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler-plugin/testData/box/stable"), Pattern.compile("^(.+)\\.kt$"), null, true);
+    }
+
+    @Test
+    @TestMetadata("indyStable.kt")
+    public void testIndyStable() {
+      runTest("compiler-plugin/testData/box/stable/indyStable.kt");
+    }
+
+    @Test
+    @TestMetadata("indyStableArrayArgs.kt")
+    public void testIndyStableArrayArgs() {
+      runTest("compiler-plugin/testData/box/stable/indyStableArrayArgs.kt");
+    }
+
+    @Test
+    @TestMetadata("indyStableCustomChecker.kt")
+    public void testIndyStableCustomChecker() {
+      runTest("compiler-plugin/testData/box/stable/indyStableCustomChecker.kt");
+    }
+
+    @Test
+    @TestMetadata("indyStableDefaultArgs.kt")
+    public void testIndyStableDefaultArgs() {
+      runTest("compiler-plugin/testData/box/stable/indyStableDefaultArgs.kt");
+    }
+
+    @Test
+    @TestMetadata("indyStablePure.kt")
+    public void testIndyStablePure() {
+      runTest("compiler-plugin/testData/box/stable/indyStablePure.kt");
+    }
   }
 }

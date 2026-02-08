@@ -1,0 +1,28 @@
+FILE: indyStable.kt
+    package foo.bar
+
+    private final var stableCount: R|kotlin/Int| = Int(0)
+        private get(): R|kotlin/Int|
+        private set(value: R|kotlin/Int|): R|kotlin/Unit|
+    public final fun computeStable(x: R|kotlin/Int|): R|kotlin/Int| {
+        R|foo/bar/stableCount| = R|foo/bar/stableCount|.R|kotlin/Int.plus|(Int(1))
+        ^computeStable R|foo/bar/stableCount|.R|kotlin/Int.times|(Int(10)).R|kotlin/Int.plus|(R|<local>/x|)
+    }
+    public final fun stableCaller(x: R|kotlin/Int|): R|kotlin/Int| {
+        ^stableCaller @R|org/bezsahara/customindy/annotations/IndyStable|() R|foo/bar/computeStable|(R|<local>/x|)
+    }
+    public final fun box(): R|kotlin/String| {
+        R|foo/bar/stableCount| = Int(0)
+        lval a: R|kotlin/Int| = R|foo/bar/stableCaller|(Int(3))
+        lval b: R|kotlin/Int| = R|foo/bar/stableCaller|(Int(3))
+        lval c: R|kotlin/Int| = R|foo/bar/stableCaller|(Int(4))
+        ^box when () {
+            ==(R|<local>/a|, R|<local>/b|) && !=(R|<local>/c|, R|<local>/a|) && ==(R|foo/bar/stableCount|, Int(2)) ->  {
+                String(OK)
+            }
+            else ->  {
+                <strcat>(String(Fail: a=), R|<local>/a|, String( b=), R|<local>/b|, String( c=), R|<local>/c|, String( count=), R|foo/bar/stableCount|)
+            }
+        }
+
+    }

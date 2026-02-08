@@ -4,6 +4,7 @@ import org.bezsahara.customindy.fir.IndyFirExtensionRegistrar
 import org.bezsahara.customindy.ir.IndyIrGenerationExtension
 import org.bezsahara.customindy.shared.IndyCallSiteRegistry
 import org.bezsahara.customindy.shared.IndyLog
+import org.bezsahara.customindy.shared.StableCallSiteRegistry
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
@@ -26,7 +27,8 @@ class IndyCompilerPluginRegistrar : CompilerPluginRegistrar() {
             ?: MessageCollector.NONE
 
         val callSiteRegistry = IndyCallSiteRegistry()
-        FirExtensionRegistrarAdapter.registerExtension(IndyFirExtensionRegistrar(callSiteRegistry))
-        IrGenerationExtension.registerExtension(IndyIrGenerationExtension(callSiteRegistry))
+        val stableRegistry = StableCallSiteRegistry()
+        FirExtensionRegistrarAdapter.registerExtension(IndyFirExtensionRegistrar(callSiteRegistry, stableRegistry))
+        IrGenerationExtension.registerExtension(IndyIrGenerationExtension(callSiteRegistry, stableRegistry))
     }
 }

@@ -13,6 +13,10 @@ object IndyFqNames {
     val INDY_METHOD_HANDLE = FqName("org.bezsahara.customindy.annotations.IndyMethodHandle")
     val INDY_METHOD_TYPE = FqName("org.bezsahara.customindy.annotations.IndyMethodType")
     val CUSTOM_INDY = FqName("org.bezsahara.customindy.annotations.CustomIndy")
+    val SIMPLE_INDY = FqName("org.bezsahara.customindy.annotations.SimpleIndy")
+    val INDY_STABLE = FqName("org.bezsahara.customindy.annotations.IndyStable")
+    val INDY_STABLE_PURE = FqName("org.bezsahara.customindy.annotations.IndyStablePure")
+    val SELF_GENERATE_CHECKER = FqName("org.bezsahara.customindy.annotations.SelfGenerateChecker")
     val INDY_CALL = FqName("org.bezsahara.customindy.runtime.indyCall")
 }
 
@@ -25,6 +29,12 @@ object IndyClassIds {
     val INDY_METHOD_HANDLE = ClassId.topLevel(IndyFqNames.INDY_METHOD_HANDLE)
     val INDY_METHOD_TYPE = ClassId.topLevel(IndyFqNames.INDY_METHOD_TYPE)
     val CUSTOM_INDY = ClassId.topLevel(IndyFqNames.CUSTOM_INDY)
+    val SIMPLE_INDY = ClassId.topLevel(IndyFqNames.SIMPLE_INDY)
+    val INDY_STABLE = ClassId.topLevel(IndyFqNames.INDY_STABLE)
+    val INDY_STABLE_PURE = ClassId.topLevel(IndyFqNames.INDY_STABLE_PURE)
+    val SELF_GENERATE_CHECKER = ClassId.topLevel(IndyFqNames.SELF_GENERATE_CHECKER)
+    val AUTO_BOOTSTRAP = ClassId.topLevel(FqName("org.bezsahara.customindy.impl.AutoBootstrap"))
+    val STABLE_BOOTSTRAP = ClassId.topLevel(FqName("org.bezsahara.customindy.impl.StableBootstrap"))
 }
 
 data class CallSiteKey(
