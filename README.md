@@ -115,7 +115,7 @@ Apply the Gradle plugin in the consumer project:
 
 ```kotlin
 plugins {
-    id("org.bezsahara.customindy")
+    id("org.bezsahara.customindy") version "0.2.3"
 }
 ```
 
