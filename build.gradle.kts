@@ -7,7 +7,7 @@ plugins {
 
 allprojects {
     group = "org.bezsahara.customindy"
-    version = "0.1.2"
+    version = "0.2.2"
 }
 
 tasks.register("publishLocalAll") {
@@ -16,6 +16,16 @@ tasks.register("publishLocalAll") {
     dependsOn(
         ":customindy-compiler-plugin:publishAllPublicationsToLocalRepoRepository",
         ":customindy-annotations:publishAllPublicationsToLocalRepoRepository"
+    )
+}
+
+tasks.register("publishToMavenLocalAll") {
+    group = "publishing"
+    description = "Publishes all subprojects to Maven Local."
+    dependsOn(
+        ":customindy-annotations:publishToMavenLocal",
+        ":customindy-compiler-plugin:publishToMavenLocal",
+        ":customindy-gradle-plugin:publishToMavenLocal"
     )
 }
 

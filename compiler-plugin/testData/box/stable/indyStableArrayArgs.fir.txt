@@ -1,0 +1,27 @@
+FILE: indyStableArrayArgs.kt
+    package foo.bar
+
+    private final var arrayCount: R|kotlin/Int| = Int(0)
+        private get(): R|kotlin/Int|
+        private set(value: R|kotlin/Int|): R|kotlin/Unit|
+    public final fun computeArrayArgs(a: R|kotlin/Array<kotlin/String>|, b: R|kotlin/IntArray|, s: R|kotlin/String|, t: R|kotlin/Byte|): R|kotlin/String| {
+        R|foo/bar/arrayCount| = R|foo/bar/arrayCount|.R|kotlin/Int.plus|(Int(1))
+        ^computeArrayArgs <strcat>(String(count=), R|foo/bar/arrayCount|, String( a=), R|<local>/a|.R|kotlin/collections/joinToString|<R|kotlin/String|>(), String( b=), R|<local>/b|.R|kotlin/collections/joinToString|(), String( s=), R|<local>/s|, String( t=), R|<local>/t|)
+    }
+    public final fun callArrayArgs(a: R|kotlin/Array<kotlin/String>|, b: R|kotlin/IntArray|, s: R|kotlin/String|, t: R|kotlin/Byte|): R|kotlin/String| {
+        ^callArrayArgs @R|org/bezsahara/customindy/annotations/IndyStable|() R|foo/bar/computeArrayArgs|(R|<local>/a|, R|<local>/b|, R|<local>/s|, R|<local>/t|)
+    }
+    public final fun box(): R|kotlin/String| {
+        R|foo/bar/arrayCount| = Int(0)
+        lval r1: R|kotlin/String| = R|foo/bar/callArrayArgs|(R|kotlin/arrayOf|<R|kotlin/String|>(vararg(String(x), String(y))), R|kotlin/intArrayOf|(vararg(Int(1), Int(2))), String(ok), Int(3).R|kotlin/Int.toByte|())
+        lval r2: R|kotlin/String| = R|foo/bar/callArrayArgs|(R|kotlin/arrayOf|<R|kotlin/String|>(vararg(String(x), String(y))), R|kotlin/intArrayOf|(vararg(Int(1), Int(2))), String(ok), Int(3).R|kotlin/Int.toByte|())
+        ^box when () {
+            ==(R|<local>/r1|, R|<local>/r2|) && ==(R|foo/bar/arrayCount|, Int(1)) ->  {
+                String(OK)
+            }
+            else ->  {
+                <strcat>(String(Fail: r1=), R|<local>/r1|, String( r2=), R|<local>/r2|, String( count=), R|foo/bar/arrayCount|)
+            }
+        }
+
+    }

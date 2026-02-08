@@ -1,0 +1,29 @@
+FILE: customIndy.kt
+    package foo.bar
+
+    public final object CustomBootstrap : R|kotlin/Any| {
+        private constructor(): R|foo/bar/CustomBootstrap| {
+            super<R|kotlin/Any|>()
+        }
+
+        @R|kotlin/jvm/JvmStatic|() public final fun bootstrap(lookup: R|java/lang/invoke/MethodHandles.Lookup|, name: R|kotlin/String|, type: R|java/lang/invoke/MethodType|, id: R|kotlin/Int|): R|java/lang/invoke/CallSite| {
+            lval mh: R|java/lang/invoke/MethodHandle!| = Q|java/lang/invoke/MethodHandles|.R|java/lang/invoke/MethodHandles.constant*s|(<getClass>(Q|kotlin/String|).R|kotlin/jvm/java|<R|kotlin/String|>, <strcat>(String(id=), R|<local>/id|))
+            ^bootstrap R|java/lang/invoke/ConstantCallSite.ConstantCallSite|(R|<local>/mh|.R|java/lang/invoke/MethodHandle.asType|(R|<local>/type|))
+        }
+
+    }
+    @R|org/bezsahara/customindy/annotations/CustomIndy|(bsmKind = Q|org/bezsahara/customindy/annotations/MHKind|.R|org/bezsahara/customindy/annotations/MHKind.INVOKESTATIC|, bsmOwner = <getClass>(Q|foo/bar/CustomBootstrap|), bsmName = String(bootstrap), bsmDesc = String((Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;I)Ljava/lang/invoke/CallSite;)) public final fun greetCustom(): R|kotlin/String| {
+        ^greetCustom String(fallback)
+    }
+    public final fun box(): R|kotlin/String| {
+        lval result: R|kotlin/String| = @R|org/bezsahara/customindy/annotations/IndyInt|(index = Int(0), value = Int(7)) R|foo/bar/greetCustom|()
+        ^box when () {
+            ==(R|<local>/result|, String(id=7)) ->  {
+                String(OK)
+            }
+            else ->  {
+                <strcat>(String(Fail: ), R|<local>/result|)
+            }
+        }
+
+    }

@@ -16,6 +16,10 @@ plugins {
 //    enabled = false
 //}
 
+dependencies {
+    implementation("org.ow2.asm:asm:9.9.1")
+}
+
 kotlin {
     explicitApi()
 }

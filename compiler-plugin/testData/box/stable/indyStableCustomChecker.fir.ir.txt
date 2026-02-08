@@ -1,0 +1,118 @@
+FILE fqName:foo.bar fileName:/indyStableCustomChecker.kt
+  PROPERTY name:customCount visibility:private modality:FINAL [var]
+    FIELD PROPERTY_BACKING_FIELD name:customCount type:kotlin.Int visibility:private [static]
+      EXPRESSION_BODY
+        CONST Int type=kotlin.Int value=0
+    FUN DEFAULT_PROPERTY_ACCESSOR name:<get-customCount> visibility:private modality:FINAL returnType:kotlin.Int
+      correspondingProperty: PROPERTY name:customCount visibility:private modality:FINAL [var]
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='private final fun <get-customCount> (): kotlin.Int declared in foo.bar'
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:customCount type:kotlin.Int visibility:private [static]' type=kotlin.Int origin=null
+    FUN DEFAULT_PROPERTY_ACCESSOR name:<set-customCount> visibility:private modality:FINAL returnType:kotlin.Unit
+      VALUE_PARAMETER kind:Regular name:<set-?> index:0 type:kotlin.Int
+      correspondingProperty: PROPERTY name:customCount visibility:private modality:FINAL [var]
+      BLOCK_BODY
+        SET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:customCount type:kotlin.Int visibility:private [static]' type=kotlin.Unit origin=null
+          value: GET_VAR '<set-?>: kotlin.Int declared in foo.bar.<set-customCount>' type=kotlin.Int origin=null
+  CLASS OBJECT name:NeverChangeChecker modality:FINAL visibility:public superTypes:[org.bezsahara.customindy.annotations.IndyStableChecker]
+    thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:foo.bar.NeverChangeChecker
+    CONSTRUCTOR visibility:private returnType:foo.bar.NeverChangeChecker [primary]
+      BLOCK_BODY
+        DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
+        INSTANCE_INITIALIZER_CALL classDescriptor='CLASS OBJECT name:NeverChangeChecker modality:FINAL visibility:public superTypes:[org.bezsahara.customindy.annotations.IndyStableChecker]' type=kotlin.Unit
+    FUN FAKE_OVERRIDE name:equals visibility:public modality:OPEN returnType:kotlin.Boolean [fake_override,operator]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
+      VALUE_PARAMETER kind:Regular name:other index:1 type:kotlin.Any?
+      overridden:
+        public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in org.bezsahara.customindy.annotations.IndyStableChecker
+    FUN FAKE_OVERRIDE name:hashCode visibility:public modality:OPEN returnType:kotlin.Int [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
+      overridden:
+        public open fun hashCode (): kotlin.Int declared in org.bezsahara.customindy.annotations.IndyStableChecker
+    FUN FAKE_OVERRIDE name:toString visibility:public modality:OPEN returnType:kotlin.String [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
+      overridden:
+        public open fun toString (): kotlin.String declared in org.bezsahara.customindy.annotations.IndyStableChecker
+    FUN name:check visibility:public modality:FINAL returnType:kotlin.Boolean
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:foo.bar.NeverChangeChecker
+      VALUE_PARAMETER kind:Regular name:oldValue index:1 type:kotlin.Int
+      VALUE_PARAMETER kind:Regular name:newValue index:2 type:kotlin.Int
+      annotations:
+        JvmStatic
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public final fun check (oldValue: kotlin.Int, newValue: kotlin.Int): kotlin.Boolean declared in foo.bar.NeverChangeChecker'
+          CONST Boolean type=kotlin.Boolean value=false
+    FUN name:checkerMethodHandle visibility:public modality:OPEN returnType:java.lang.invoke.MethodHandle
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:foo.bar.NeverChangeChecker
+      overridden:
+        public abstract fun checkerMethodHandle (): java.lang.invoke.MethodHandle declared in org.bezsahara.customindy.annotations.IndyStableChecker
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public open fun checkerMethodHandle (): java.lang.invoke.MethodHandle declared in foo.bar.NeverChangeChecker'
+          TYPE_OP type=java.lang.invoke.MethodHandle origin=IMPLICIT_NOTNULL typeOperand=java.lang.invoke.MethodHandle
+            CALL 'public open fun findStatic (p0: @[FlexibleNullability] java.lang.Class<*>?, p1: @[FlexibleNullability] kotlin.String?, p2: @[FlexibleNullability] java.lang.invoke.MethodType?): @[FlexibleNullability] java.lang.invoke.MethodHandle? declared in java.lang.invoke.MethodHandles.Lookup' type=@[FlexibleNullability] java.lang.invoke.MethodHandle? origin=null
+              ARG <this>: TYPE_OP type=java.lang.invoke.MethodHandles.Lookup origin=IMPLICIT_NOTNULL typeOperand=java.lang.invoke.MethodHandles.Lookup
+                CALL 'public open fun lookup (): @[FlexibleNullability] java.lang.invoke.MethodHandles.Lookup? declared in java.lang.invoke.MethodHandles' type=@[FlexibleNullability] java.lang.invoke.MethodHandles.Lookup? origin=null
+              ARG p0: CALL 'public final fun <get-java> <T> (<this>: kotlin.reflect.KClass<T of kotlin.jvm.<get-java>>): java.lang.Class<T of kotlin.jvm.<get-java>> declared in kotlin.jvm' type=java.lang.Class<foo.bar.NeverChangeChecker> origin=GET_PROPERTY
+                TYPE_ARG T: foo.bar.NeverChangeChecker
+                ARG <this>: CLASS_REFERENCE 'CLASS OBJECT name:NeverChangeChecker modality:FINAL visibility:public superTypes:[org.bezsahara.customindy.annotations.IndyStableChecker]' type=kotlin.reflect.KClass<foo.bar.NeverChangeChecker>
+              ARG p1: CONST String type=kotlin.String value="check"
+              ARG p2: CALL 'public open fun methodType (p0: @[FlexibleNullability] java.lang.Class<*>?, p1: @[FlexibleNullability] java.lang.Class<*>?, vararg p2: @[FlexibleNullability] java.lang.Class<*>?): @[FlexibleNullability] java.lang.invoke.MethodType? declared in java.lang.invoke.MethodType' type=@[FlexibleNullability] java.lang.invoke.MethodType? origin=null
+                ARG p0: GET_FIELD 'FIELD IR_EXTERNAL_JAVA_DECLARATION_STUB name:TYPE type:@[FlexibleNullability] java.lang.Class<@[FlexibleNullability] kotlin.Boolean?>? visibility:public [final,static] declared in java.lang.Boolean' type=@[FlexibleNullability] java.lang.Class<@[FlexibleNullability] kotlin.Boolean?>? superQualifierSymbol=java.lang.Boolean origin=null
+                ARG p1: GET_FIELD 'FIELD IR_EXTERNAL_JAVA_DECLARATION_STUB name:TYPE type:@[FlexibleNullability] java.lang.Class<@[FlexibleNullability] kotlin.Int?>? visibility:public [final,static] declared in java.lang.Integer' type=@[FlexibleNullability] java.lang.Class<@[FlexibleNullability] kotlin.Int?>? superQualifierSymbol=java.lang.Integer origin=null
+                ARG p2: VARARG type=@[FlexibleNullability] @[FlexibleArrayElementVariance] kotlin.Array<out @[FlexibleNullability] java.lang.Class<*>?>? varargElementType=@[FlexibleNullability] java.lang.Class<*>?
+                  GET_FIELD 'FIELD IR_EXTERNAL_JAVA_DECLARATION_STUB name:TYPE type:@[FlexibleNullability] java.lang.Class<@[FlexibleNullability] kotlin.Int?>? visibility:public [final,static] declared in java.lang.Integer' type=@[FlexibleNullability] java.lang.Class<@[FlexibleNullability] kotlin.Int?>? superQualifierSymbol=java.lang.Integer origin=null
+  FUN name:box visibility:public modality:FINAL returnType:kotlin.String
+    BLOCK_BODY
+      CALL 'private final fun <set-customCount> (<set-?>: kotlin.Int): kotlin.Unit declared in foo.bar' type=kotlin.Unit origin=EQ
+        ARG <set-?>: CONST Int type=kotlin.Int value=0
+      VAR name:a type:kotlin.Int [val]
+        CALL 'public final fun customCaller (x: kotlin.Int): kotlin.Int declared in foo.bar' type=kotlin.Int origin=null
+          ARG x: CONST Int type=kotlin.Int value=1
+      VAR name:b type:kotlin.Int [val]
+        CALL 'public final fun customCaller (x: kotlin.Int): kotlin.Int declared in foo.bar' type=kotlin.Int origin=null
+          ARG x: CONST Int type=kotlin.Int value=2
+      RETURN type=kotlin.Nothing from='public final fun box (): kotlin.String declared in foo.bar'
+        WHEN type=kotlin.String origin=IF
+          BRANCH
+            if: WHEN type=kotlin.Boolean origin=ANDAND
+              BRANCH
+                if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                  ARG arg0: GET_VAR 'val a: kotlin.Int declared in foo.bar.box' type=kotlin.Int origin=null
+                  ARG arg1: GET_VAR 'val b: kotlin.Int declared in foo.bar.box' type=kotlin.Int origin=null
+                then: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                  ARG arg0: CALL 'private final fun <get-customCount> (): kotlin.Int declared in foo.bar' type=kotlin.Int origin=GET_PROPERTY
+                  ARG arg1: CONST Int type=kotlin.Int value=1
+              BRANCH
+                if: CONST Boolean type=kotlin.Boolean value=true
+                then: CONST Boolean type=kotlin.Boolean value=false
+            then: BLOCK type=kotlin.String origin=null
+              CONST String type=kotlin.String value="OK"
+          BRANCH
+            if: CONST Boolean type=kotlin.Boolean value=true
+            then: BLOCK type=kotlin.String origin=null
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value="Fail: a="
+                GET_VAR 'val a: kotlin.Int declared in foo.bar.box' type=kotlin.Int origin=null
+                CONST String type=kotlin.String value=" b="
+                GET_VAR 'val b: kotlin.Int declared in foo.bar.box' type=kotlin.Int origin=null
+                CONST String type=kotlin.String value=" count="
+                CALL 'private final fun <get-customCount> (): kotlin.Int declared in foo.bar' type=kotlin.Int origin=GET_PROPERTY
+  FUN name:computeCustom visibility:public modality:FINAL returnType:kotlin.Int
+    VALUE_PARAMETER kind:Regular name:x index:0 type:kotlin.Int
+    BLOCK_BODY
+      CALL 'private final fun <set-customCount> (<set-?>: kotlin.Int): kotlin.Unit declared in foo.bar' type=kotlin.Unit origin=PLUSEQ
+        ARG <set-?>: CALL 'public final fun plus (other: kotlin.Int): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=PLUSEQ
+          ARG <this>: CALL 'private final fun <get-customCount> (): kotlin.Int declared in foo.bar' type=kotlin.Int origin=PLUSEQ
+          ARG other: CONST Int type=kotlin.Int value=1
+      RETURN type=kotlin.Nothing from='public final fun computeCustom (x: kotlin.Int): kotlin.Int declared in foo.bar'
+        CALL 'public final fun plus (other: kotlin.Int): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=PLUS
+          ARG <this>: CALL 'public final fun times (other: kotlin.Int): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=MUL
+            ARG <this>: CALL 'private final fun <get-customCount> (): kotlin.Int declared in foo.bar' type=kotlin.Int origin=GET_PROPERTY
+            ARG other: CONST Int type=kotlin.Int value=1000
+          ARG other: GET_VAR 'x: kotlin.Int declared in foo.bar.computeCustom' type=kotlin.Int origin=null
+  FUN name:customCaller visibility:public modality:FINAL returnType:kotlin.Int
+    VALUE_PARAMETER kind:Regular name:x index:0 type:kotlin.Int
+    BLOCK_BODY
+      RETURN type=kotlin.Nothing from='public final fun customCaller (x: kotlin.Int): kotlin.Int declared in foo.bar'
+        CALL 'public final fun computeCustom (x: kotlin.Int): kotlin.Int declared in foo.bar' type=kotlin.Int origin=null
+          ARG x: GET_VAR 'x: kotlin.Int declared in foo.bar.customCaller' type=kotlin.Int origin=null

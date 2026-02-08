@@ -1,0 +1,27 @@
+FILE: indyStablePure.kt
+    package foo.bar
+
+    private final var pureCount: R|kotlin/Int| = Int(0)
+        private get(): R|kotlin/Int|
+        private set(value: R|kotlin/Int|): R|kotlin/Unit|
+    public final fun computePure(x: R|kotlin/Int|): R|kotlin/Int| {
+        R|foo/bar/pureCount| = R|foo/bar/pureCount|.R|kotlin/Int.plus|(Int(1))
+        ^computePure R|foo/bar/pureCount|.R|kotlin/Int.times|(Int(100)).R|kotlin/Int.plus|(R|<local>/x|)
+    }
+    public final fun pureCaller(x: R|kotlin/Int|): R|kotlin/Int| {
+        ^pureCaller @R|org/bezsahara/customindy/annotations/IndyStablePure|(stableThread = Q|org/bezsahara/customindy/annotations/StableThread|.R|org/bezsahara/customindy/annotations/StableThread.NONE|) R|foo/bar/computePure|(R|<local>/x|)
+    }
+    public final fun box(): R|kotlin/String| {
+        R|foo/bar/pureCount| = Int(0)
+        lval a: R|kotlin/Int| = R|foo/bar/pureCaller|(Int(1))
+        lval b: R|kotlin/Int| = R|foo/bar/pureCaller|(Int(2))
+        ^box when () {
+            ==(R|<local>/a|, R|<local>/b|) && ==(R|foo/bar/pureCount|, Int(1)) ->  {
+                String(OK)
+            }
+            else ->  {
+                <strcat>(String(Fail: a=), R|<local>/a|, String( b=), R|<local>/b|, String( count=), R|foo/bar/pureCount|)
+            }
+        }
+
+    }

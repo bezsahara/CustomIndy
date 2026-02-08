@@ -1,0 +1,27 @@
+FILE: indyStableDefaultArgs.kt
+    package foo.bar
+
+    private final var defaultCount: R|kotlin/Int| = Int(0)
+        private get(): R|kotlin/Int|
+        private set(value: R|kotlin/Int|): R|kotlin/Unit|
+    public final fun computeDefault(a: R|kotlin/Int|, b: R|kotlin/String| = String(def)): R|kotlin/String| {
+        R|foo/bar/defaultCount| = R|foo/bar/defaultCount|.R|kotlin/Int.plus|(Int(1))
+        ^computeDefault <strcat>(String(count=), R|foo/bar/defaultCount|, String( a=), R|<local>/a|, String( b=), R|<local>/b|)
+    }
+    public final fun stableDefaultCaller(a: R|kotlin/Int|): R|kotlin/String| {
+        ^stableDefaultCaller @R|org/bezsahara/customindy/annotations/IndyStable|() R|foo/bar/computeDefault|(R|<local>/a|)
+    }
+    public final fun box(): R|kotlin/String| {
+        R|foo/bar/defaultCount| = Int(0)
+        lval r1: R|kotlin/String| = R|foo/bar/stableDefaultCaller|(Int(1))
+        lval r2: R|kotlin/String| = R|foo/bar/stableDefaultCaller|(Int(1))
+        ^box when () {
+            ==(R|<local>/r1|, R|<local>/r2|) && ==(R|foo/bar/defaultCount|, Int(1)) ->  {
+                String(OK)
+            }
+            else ->  {
+                <strcat>(String(Fail: r1=), R|<local>/r1|, String( r2=), R|<local>/r2|, String( count=), R|foo/bar/defaultCount|)
+            }
+        }
+
+    }

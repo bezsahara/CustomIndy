@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.backend.jvm.codegen.JvmIrIntrinsicExtension
 import org.jetbrains.kotlin.backend.jvm.codegen.MaterialValue
 import org.jetbrains.kotlin.backend.jvm.codegen.PromisedValue
 import org.jetbrains.kotlin.backend.jvm.intrinsics.IntrinsicMethod
+import org.jetbrains.kotlin.codegen.StackValue
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrFunctionAccessExpression
 import org.jetbrains.kotlin.ir.symbols.IrFunctionSymbol
@@ -37,24 +38,40 @@ private object IndyInvokeDynamic : IntrinsicMethod() {
         val call = expression as? IrCall ?: error("<jvm-indy> must be a call")
         val indyData = call.indyCallData ?: error("Missing indyCallData for invokedynamic")
 
-        val dynamicCall = indyData.dynamicCall
-        val dynamicCallee = indyData.targetSymbol.owner
+        val dynamicCall = call.arguments[0] as? IrCall
+            ?: error("<jvm-indy> dynamicCall argument must be a call")
+        val dynamicCallee = dynamicCall.symbol.owner
         val dynamicCalleeMethod = codegen.methodSignatureMapper.mapAsmMethod(dynamicCallee)
         val dynamicCalleeArgumentTypes = dynamicCalleeMethod.argumentTypes
 
         val callGenerator = IrCallGenerator.DefaultCallGenerator
         for (i in dynamicCallee.parameters.indices) {
             val param = dynamicCallee.parameters[i]
-            val arg = dynamicCall.arguments[i] ?: error("No argument #$i in dynamic call")
             val argType = dynamicCalleeArgumentTypes.getOrElse(i) {
                 error("No argument type #$i in dynamic callee")
             }
-            callGenerator.genValueAndPut(param, arg, argType, codegen, data)
+            val arg = dynamicCall.arguments[i]
+            if (arg == null) {
+                StackValue.createDefaultValue(argType).put(argType, null, codegen.mv, codegen.typeMapper)
+            } else {
+                callGenerator.genValueAndPut(param, arg, argType, codegen, data)
+            }
         }
 
         val bootstrapArgs = indyData.bootstrapArgs
             .sortedBy { it.index }
-            .map { toAsmBootstrapArg(it, codegen) }
+            .map { arg ->
+                when (arg) {
+                    is IndyBootstrapIrArg.FunctionHandleArg -> {
+                        val targetOwner = arg.target.owner
+                        val targetMethod = codegen.methodSignatureMapper.mapAsmMethod(targetOwner)
+                        val handleOwner =
+                            if (targetMethod.descriptor == dynamicCalleeMethod.descriptor) targetOwner else dynamicCallee
+                        codegen.methodSignatureMapper.mapToMethodHandle(handleOwner)
+                    }
+                    else -> toAsmBootstrapArg(arg, codegen)
+                }
+            }
             .toTypedArray()
 
         codegen.mv.invokedynamic(
@@ -76,6 +93,8 @@ private fun toAsmBootstrapArg(arg: IndyBootstrapIrArg, codegen: ExpressionCodege
         is IndyBootstrapIrArg.StringArg -> arg.value
         is IndyBootstrapIrArg.ClassArg ->
             codegen.typeMapper.mapType(arg.type, TypeMappingMode.INVOKE_DYNAMIC_BOOTSTRAP_ARGUMENT)
+        is IndyBootstrapIrArg.FunctionHandleArg ->
+            codegen.methodSignatureMapper.mapToMethodHandle(arg.target.owner)
         is IndyBootstrapIrArg.MethodTypeArg -> Type.getMethodType(arg.desc)
         is IndyBootstrapIrArg.MethodHandleArg -> {
             val ownerType = codegen.typeMapper.mapType(arg.ownerType)

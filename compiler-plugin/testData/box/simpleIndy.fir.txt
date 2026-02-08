@@ -1,0 +1,30 @@
+FILE: simpleIndy.kt
+    package foo.bar
+
+    public final class SimpleBootstrap : R|org/bezsahara/customindy/annotations/BootstrapIndy| {
+        public constructor(): R|foo/bar/SimpleBootstrap| {
+            super<R|kotlin/Any|>()
+        }
+
+        public open override fun bootstrap(lookup: R|java/lang/invoke/MethodHandles.Lookup|, name: R|kotlin/String|, type: R|java/lang/invoke/MethodType|, args: R|kotlin/Array<out kotlin/Any>|): R|java/lang/invoke/CallSite| {
+            lval msg: R|kotlin/String| = <strcat>(String(args=), R|<local>/args|.R|SubstitutionOverride<kotlin/Array.get: R|CapturedType(out kotlin/Any)|>|(Int(0)), String(,), R|<local>/args|.R|SubstitutionOverride<kotlin/Array.get: R|CapturedType(out kotlin/Any)|>|(Int(1)))
+            lval mh: R|java/lang/invoke/MethodHandle!| = Q|java/lang/invoke/MethodHandles|.R|java/lang/invoke/MethodHandles.constant*s|(<getClass>(Q|kotlin/String|).R|kotlin/jvm/java|<R|kotlin/String|>, R|<local>/msg|)
+            ^bootstrap R|java/lang/invoke/ConstantCallSite.ConstantCallSite|(R|<local>/mh|.R|java/lang/invoke/MethodHandle.asType|(R|<local>/type|))
+        }
+
+    }
+    @R|org/bezsahara/customindy/annotations/SimpleIndy|(bsmClass = <getClass>(Q|foo/bar/SimpleBootstrap|)) public final fun greetSimple(): R|kotlin/String| {
+        ^greetSimple String(fallback)
+    }
+    public final fun box(): R|kotlin/String| {
+        lval result: R|kotlin/String| = @R|org/bezsahara/customindy/annotations/IndyInt|(index = Int(0), value = Int(3)) @R|org/bezsahara/customindy/annotations/IndyStr|(index = Int(1), value = String(ok)) R|foo/bar/greetSimple|()
+        ^box when () {
+            ==(R|<local>/result|, String(args=3,ok)) ->  {
+                String(OK)
+            }
+            else ->  {
+                <strcat>(String(Fail: ), R|<local>/result|)
+            }
+        }
+
+    }

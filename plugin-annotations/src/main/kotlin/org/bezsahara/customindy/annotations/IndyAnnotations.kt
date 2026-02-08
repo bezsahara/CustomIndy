@@ -175,3 +175,19 @@ public annotation class CustomIndy(
     val bsmName: String,
     val bsmDesc: String
 )
+
+
+/**
+ * Simple version of [CustomIndy] that uses [BootstrapIndy].
+ *
+ * The plugin rewrites call sites to use `AutoBootstrap.bootstrap`, passing [bsmClass]
+ * as the first bootstrap argument, followed by any `@Indy*` arguments from the call site.
+ * The class must implement [BootstrapIndy] and have a no-arg constructor or be a Kotlin object.
+ *
+ * Default arguments are not supported for `@SimpleIndy` call sites.
+ */
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.FUNCTION)
+public annotation class SimpleIndy(
+    val bsmClass: KClass<out BootstrapIndy>
+)
