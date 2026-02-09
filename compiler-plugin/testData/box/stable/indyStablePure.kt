@@ -13,7 +13,7 @@ fun computePure(x: Int): Int {
 }
 
 fun pureCaller(x: Int): Int {
-    return (@IndyStablePure(stableThread = StableThread.NONE) computePure(x))
+    return (@IndyStablePure(stableThread = StableThread.SYNCHRONIZED) computePure(x))
 }
 
 fun box(): String {

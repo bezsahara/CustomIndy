@@ -1,4 +1,4 @@
-package org.bezsahara.customindy.impl
+package org.bezsahara.customindy.impl.asm
 
 import org.bezsahara.customindy.annotations.StableThread
 import org.objectweb.asm.ClassWriter
@@ -667,13 +667,7 @@ internal class StableAsmGenerator(
         return elem.sort != Type.OBJECT && elem.sort != Type.ARRAY
     }
 
-    private fun loadOpcode(type: Type): Int = when (type.sort) {
-        Type.BOOLEAN, Type.BYTE, Type.CHAR, Type.SHORT, Type.INT -> Opcodes.ILOAD
-        Type.LONG -> Opcodes.LLOAD
-        Type.FLOAT -> Opcodes.FLOAD
-        Type.DOUBLE -> Opcodes.DLOAD
-        else -> Opcodes.ALOAD
-    }
+
 
     private fun storeOpcode(type: Type): Int = when (type.sort) {
         Type.BOOLEAN, Type.BYTE, Type.CHAR, Type.SHORT, Type.INT -> Opcodes.ISTORE
@@ -683,16 +677,26 @@ internal class StableAsmGenerator(
         else -> Opcodes.ASTORE
     }
 
-    private fun returnOpcode(type: Type): Int = when (type.sort) {
-        Type.BOOLEAN, Type.BYTE, Type.CHAR, Type.SHORT, Type.INT -> Opcodes.IRETURN
-        Type.LONG -> Opcodes.LRETURN
-        Type.FLOAT -> Opcodes.FRETURN
-        Type.DOUBLE -> Opcodes.DRETURN
-        else -> Opcodes.ARETURN
-    }
+
 }
 
-private class LoaderAwareClassWriter(
+internal fun loadOpcode(type: Type): Int = when (type.sort) {
+    Type.BOOLEAN, Type.BYTE, Type.CHAR, Type.SHORT, Type.INT -> Opcodes.ILOAD
+    Type.LONG -> Opcodes.LLOAD
+    Type.FLOAT -> Opcodes.FLOAD
+    Type.DOUBLE -> Opcodes.DLOAD
+    else -> Opcodes.ALOAD
+}
+
+internal fun returnOpcode(type: Type): Int = when (type.sort) {
+    Type.BOOLEAN, Type.BYTE, Type.CHAR, Type.SHORT, Type.INT -> Opcodes.IRETURN
+    Type.LONG -> Opcodes.LRETURN
+    Type.FLOAT -> Opcodes.FRETURN
+    Type.DOUBLE -> Opcodes.DRETURN
+    else -> Opcodes.ARETURN
+}
+
+internal class LoaderAwareClassWriter(
     flags: Int,
     private val loader: ClassLoader,
 ) : ClassWriter(flags) {
