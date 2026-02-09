@@ -9,7 +9,7 @@ FILE: indyStablePure.kt
         ^computePure R|foo/bar/pureCount|.R|kotlin/Int.times|(Int(100)).R|kotlin/Int.plus|(R|<local>/x|)
     }
     public final fun pureCaller(x: R|kotlin/Int|): R|kotlin/Int| {
-        ^pureCaller @R|org/bezsahara/customindy/annotations/IndyStablePure|(stableThread = Q|org/bezsahara/customindy/annotations/StableThread|.R|org/bezsahara/customindy/annotations/StableThread.NONE|) R|foo/bar/computePure|(R|<local>/x|)
+        ^pureCaller @R|org/bezsahara/customindy/annotations/IndyStablePure|(stableThread = Q|org/bezsahara/customindy/annotations/StableThread|.R|org/bezsahara/customindy/annotations/StableThread.SYNCHRONIZED|) R|foo/bar/computePure|(R|<local>/x|)
     }
     public final fun box(): R|kotlin/String| {
         R|foo/bar/pureCount| = Int(0)

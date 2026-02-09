@@ -3,11 +3,14 @@ package org.bezsahara.customindy.impl
 import org.bezsahara.customindy.annotations.IndyStableChecker
 import org.bezsahara.customindy.annotations.SelfGenerateChecker
 import org.bezsahara.customindy.annotations.StableThread
+import org.bezsahara.customindy.impl.asm.PureAsm
+import org.bezsahara.customindy.impl.asm.StableAsmGenerator
 import java.lang.invoke.CallSite
 import java.lang.invoke.ConstantCallSite
 import java.lang.invoke.MethodHandle
 import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
+import java.lang.invoke.MutableCallSite
 import java.util.concurrent.atomic.AtomicLong
 
 public object StableBootstrap {
@@ -24,6 +27,40 @@ public object StableBootstrap {
         defaultParamCount: Int,
     ): CallSite {
         val thread = stableThreadFromOrdinal(stableThread)
+
+        val mtc = MutableCallSite(type)
+
+        val name1 = nextInternalName(lookup.lookupClass())
+        val (classBytes, invokeDesc) = PureAsm(
+            lookup.lookupClass().classLoader,
+            type,
+            name1,
+            thread
+        ).generate()
+
+        val generatedClass = lookup.defineHiddenClass(
+            classBytes,
+            true,
+            MethodHandles.Lookup.ClassOption.NESTMATE,
+            MethodHandles.Lookup.ClassOption.STRONG,
+        )
+        val invoke = generatedClass.findStatic(generatedClass.lookupClass(), "invoke", invokeDesc)
+        mtc.target = MethodHandles.insertArguments(invoke, 0, mtc, actualFunMH).asType(type)
+        return mtc
+    }
+
+    @JvmStatic
+    public fun bootstrapPureOld(
+        lookup: MethodHandles.Lookup,
+        name: String,
+        type: MethodType,
+        actualFunMH: MethodHandle,
+        stableThread: Int,
+        defaultMask: Long,
+        defaultParamCount: Int,
+    ): CallSite {
+        val thread = stableThreadFromOrdinal(stableThread)
+
         val generated = StableAsmGenerator(
             internalName = nextInternalName(lookup.lookupClass()),
             callType = type,

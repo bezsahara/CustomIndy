@@ -7,7 +7,7 @@ plugins {
 
 allprojects {
     group = "org.bezsahara.customindy"
-    version = "0.2.3"
+    version = "0.2.4"
 }
 
 tasks.register("publishLocalAll") {
